@@ -9,8 +9,16 @@ public class Level01Controller : MonoBehaviour
 {
     [SerializeField] Text _currentScoreTextView;
 
+    //pause menu
+    public static bool GameIsPaused = false;
+    public GameObject pauseMenuUI;
+
     int _currentScore;
 
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -20,12 +28,25 @@ public class Level01Controller : MonoBehaviour
         {
             IncreaseScore(5);
         }
+
+        //pause menu
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
         //Exit level
         //TODO bring up pop up menu for navigation
-        if(Input.GetKeyDown(KeyCode.Escape))
+        /*if(Input.GetKeyDown(KeyCode.Escape))
         {
             ExitLevel();
-        }
+        }*/
     }
 
     private void IncreaseScore(int scoreIncrease)
@@ -36,7 +57,7 @@ public class Level01Controller : MonoBehaviour
         _currentScoreTextView.text = "Score: " + _currentScore.ToString();
     }
 
-    private void ExitLevel()
+    public void ExitLevel()
     {
         //compare score to high score
         int highScore = PlayerPrefs.GetInt("HighScore");
@@ -48,5 +69,28 @@ public class Level01Controller : MonoBehaviour
         }
         //load new level
         SceneManager.LoadScene("MainMenu");
+    }
+
+    //pause menu functions
+    public void Resume()
+    {        
+        Cursor.visible = false;
+        pauseMenuUI.SetActive(false);
+
+        //Time.timeScale = 1f;
+        GameIsPaused = false;
+    }
+
+    void Pause()
+    {
+        pauseMenuUI.SetActive(true);
+        Cursor.visible = true;
+        //Time.timeScale = 0f;
+        GameIsPaused = true;
+    }
+
+    public void QuitButton()
+    {
+        ExitLevel();
     }
 }

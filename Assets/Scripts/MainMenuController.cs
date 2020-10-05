@@ -12,18 +12,28 @@ public class MainMenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //load high score display
-        int highScore = PlayerPrefs.GetInt("HighScore");
-        _highScoreTextView.text = highScore.ToString();
         if(_startingSong != null)
         {
             AudioManager.Instance.PlaySong(_startingSong);
         }
     }
 
+    public void ResetData()
+    {
+        PlayerPrefs.SetInt("HighScore", 0);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+        Debug.Log("Quit");
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        //load high score display
+        int highScore = PlayerPrefs.GetInt("HighScore");
+        _highScoreTextView.text = highScore.ToString();
     }
 }
