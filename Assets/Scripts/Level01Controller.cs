@@ -17,10 +17,11 @@ public class Level01Controller : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
+        Resume();
+
     }
-    // Update is called once per frame
-    void Update()
+// Update is called once per frame
+void Update()
     {
         //Increase Score
         //TODO replace with real implentation later
@@ -41,12 +42,6 @@ public class Level01Controller : MonoBehaviour
                 Pause();
             }
         }
-        //Exit level
-        //TODO bring up pop up menu for navigation
-        /*if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            ExitLevel();
-        }*/
     }
 
     private void IncreaseScore(int scoreIncrease)
@@ -74,23 +69,25 @@ public class Level01Controller : MonoBehaviour
     //pause menu functions
     public void Resume()
     {        
-        Cursor.visible = false;
         pauseMenuUI.SetActive(false);
-
-        //Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Time.timeScale = 1f;
         GameIsPaused = false;
     }
 
     void Pause()
     {
         pauseMenuUI.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         GameIsPaused = true;
     }
 
     public void QuitButton()
     {
+        GameIsPaused = false;
         ExitLevel();
     }
 }
