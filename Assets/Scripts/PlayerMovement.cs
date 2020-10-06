@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+    Level01Controller level01Controller = new Level01Controller();
 
     public float speed = 12f;
     public float gravity = -9.81f;
@@ -33,7 +34,12 @@ public class PlayerMovement : MonoBehaviour
 
         Moving(currentSpeed);
 
-        if(Input.GetMouseButtonDown(0))
+        Shooting();
+    }
+
+    private void Shooting()
+    {
+        if (Input.GetMouseButtonDown(0) && !level01Controller.IsPaused())
         {
             _gunParticles.Clear();
             AudioManager.Instance.PlaySong(_gunSound);

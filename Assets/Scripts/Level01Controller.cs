@@ -8,30 +8,78 @@ using UnityEngine.UI;
 public class Level01Controller : MonoBehaviour
 {
     [SerializeField] Text _currentScoreTextView;
+    [SerializeField] Text _currentHealthTextView;
 
     //pause menu
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    public GameObject deathMenuUI;
+
+    //Health
+    static int maxHealth = 100;
+    PlayerHealth playerHealth = new PlayerHealth(maxHealth);
+    public HealthBar healthBar;
+    //public Slider slider;
 
     int _currentScore;
 
+    private bool isDead = false;
+
     private void Start()
     {
+        Debug.Log("Health: " + playerHealth.GetHealth());
+        healthBar.SetMaxHealth(maxHealth);
+        //SetSlider();
         Resume();
-
     }
-// Update is called once per frame
-void Update()
+
+
+
+    // Update is called once per frame
+    void Update()
     {
         //Increase Score
         //TODO replace with real implentation later
-        if(Input.GetKeyDown(KeyCode.Q))
+        DebugMethods();
+
+        //display score
+        _currentScoreTextView.text = "Score: " + _currentScore.ToString();
+
+        //update health
+        _currentHealthTextView.text = "Health: " + playerHealth.GetHealth().ToString();
+        //SetHealth(playerHealth.GetHealth());
+        if(playerHealth.GetHealth() == 0)
         {
-            IncreaseScore(5);
+            Die();
         }
 
         //pause menu
-        if (Input.GetKeyDown(KeyCode.Escape))
+        EscPressed();
+    }  
+
+    private void DebugMethods()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            IncreaseScore(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            TakeDamage(5);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            playerHealth.Heal(5);
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Health: " + playerHealth.GetHealth());
+        }
+    }
+
+    private void EscPressed()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !isDead)
         {
             if (GameIsPaused)
             {
@@ -89,5 +137,38 @@ void Update()
     {
         GameIsPaused = false;
         ExitLevel();
+    }
+
+    public bool IsPaused()
+    {
+        return GameIsPaused;
+    }
+
+    //health functions
+    /*private void SetSlider()
+    {
+        slider.maxValue = maxHealth;
+        slider.value = maxHealth;
+    }
+
+    public void SetHealth(int health)
+    {
+        slider.value = health;
+    }*/
+
+    public void TakeDamage(int damage)
+    {
+        playerHealth.Damage(5);
+        healthBar.SetHealth(playerHealth.GetHealth());
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        deathMenuUI.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0f;
+        GameIsPaused = true;
     }
 }
