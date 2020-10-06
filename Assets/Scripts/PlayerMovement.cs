@@ -23,6 +23,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] ParticleSystem _gunParticles;
     [SerializeField] AudioClip _gunSound;
 
+    AudioSource _audioSource;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -42,7 +48,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !level01Controller.IsPaused())
         {
             _gunParticles.Clear();
-            AudioManager.Instance.PlaySong(_gunSound);
+            _audioSource.PlayOneShot(_gunSound, 1f);
+            //AudioManager.Instance.PlaySong(_gunSound);
             _gunParticles.Play();
         }
     }
@@ -89,3 +96,4 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
     }
 }
+

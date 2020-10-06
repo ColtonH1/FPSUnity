@@ -19,7 +19,6 @@ public class Level01Controller : MonoBehaviour
     static int maxHealth = 100;
     PlayerHealth playerHealth = new PlayerHealth(maxHealth);
     public HealthBar healthBar;
-    //public Slider slider;
 
     int _currentScore;
 
@@ -29,11 +28,8 @@ public class Level01Controller : MonoBehaviour
     {
         Debug.Log("Health: " + playerHealth.GetHealth());
         healthBar.SetMaxHealth(maxHealth);
-        //SetSlider();
         Resume();
     }
-
-
 
     // Update is called once per frame
     void Update()
@@ -47,7 +43,6 @@ public class Level01Controller : MonoBehaviour
 
         //update health
         _currentHealthTextView.text = "Health: " + playerHealth.GetHealth().ToString();
-        //SetHealth(playerHealth.GetHealth());
         if(playerHealth.GetHealth() == 0)
         {
             Die();
@@ -55,7 +50,25 @@ public class Level01Controller : MonoBehaviour
 
         //pause menu
         EscPressed();
-    }  
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        switch (collision.gameObject.tag)
+        {
+            case "Enemy":
+                {
+                    TakeDamage(50);
+                    Debug.Log("Collided");
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+    }
 
     private void DebugMethods()
     {
@@ -63,6 +76,8 @@ public class Level01Controller : MonoBehaviour
         {
             IncreaseScore(5);
         }
+        
+        //health debug
         if (Input.GetKeyDown(KeyCode.Z))
         {
             TakeDamage(5);
@@ -145,20 +160,10 @@ public class Level01Controller : MonoBehaviour
     }
 
     //health functions
-    /*private void SetSlider()
-    {
-        slider.maxValue = maxHealth;
-        slider.value = maxHealth;
-    }
-
-    public void SetHealth(int health)
-    {
-        slider.value = health;
-    }*/
 
     public void TakeDamage(int damage)
     {
-        playerHealth.Damage(5);
+        playerHealth.Damage(damage);
         healthBar.SetHealth(playerHealth.GetHealth());
     }
 
